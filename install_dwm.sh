@@ -6,7 +6,7 @@ mkdir -p $HOME/.local/src
 
 # Step 2: Install dependencies using pacman
 echo "Installing required dependencies..."
-sudo pacman -S --noconfirm git libxft libxinerama
+sudo pacman -S --noconfirm git libxft libxinerama nano
 
 # Step 3: Clone the necessary repositories
 echo "Cloning dwm, st, and dmenu repositories..."
