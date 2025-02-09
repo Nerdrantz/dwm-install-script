@@ -49,6 +49,14 @@ head -n -5 ~/.xinitrc > ~/.xinitrc.tmp && mv ~/.xinitrc.tmp ~/.xinitrc
 echo "Adding exec dwm to the bottom of ~/.xinitrc..."
 echo "exec dwm" >> ~/.xinitrc
 
+# Ensure .xinitrc is correctly set up after reboot
+if ! grep -q "exec dwm" ~/.xinitrc; then
+    echo "exec dwm not found in ~/.xinitrc, adding it now."
+    echo "exec dwm" >> ~/.xinitrc
+else
+    echo "exec dwm already exists in ~/.xinitrc."
+fi
+
 # Step 9: Install fonts
 echo "Installing fonts ttf-jetbrains-mono and ttf-font-awesome..."
 sudo pacman -S --noconfirm ttf-jetbrains-mono ttf-font-awesome
