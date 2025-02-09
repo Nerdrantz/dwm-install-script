@@ -6,7 +6,7 @@ mkdir -p $HOME/.local/src
 
 # Step 2: Install dependencies using pacman
 echo "Installing required dependencies..."
-sudo pacman -S --noconfirm git libxft libxinerama nano
+sudo pacman -S --noconfirm git libxft libxinerama xterm
 
 # Step 3: Clone the necessary repositories
 echo "Cloning dwm, st, and dmenu repositories..."
@@ -31,7 +31,7 @@ sudo make clean install
 # Step 5: Return to the main directory
 cd $HOME
 
-# Step 6: Check if xinitrc exists and copy it
+# Step 6: Check if /etc/X11/xinit/xinitrc exists and copy it to ~/.xinitrc
 echo "Checking if /etc/X11/xinit/xinitrc exists..."
 if [ -f /etc/X11/xinit/xinitrc ]; then
     echo "Copying /etc/X11/xinit/xinitrc to ~/.xinitrc..."
@@ -57,11 +57,19 @@ else
     echo "exec dwm already exists in ~/.xinitrc."
 fi
 
-# Step 9: Install fonts
+# Step 9: Ensure .xinitrc is correctly populated
+if [ ! -s ~/.xinitrc ]; then
+    echo "Error: ~/.xinitrc is empty after script ran. Something went wrong!"
+    exit 1
+else
+    echo "~/.xinitrc successfully set up."
+fi
+
+# Step 10: Install fonts
 echo "Installing fonts ttf-jetbrains-mono and ttf-font-awesome..."
 sudo pacman -S --noconfirm ttf-jetbrains-mono ttf-font-awesome
 
-# Step 10: Run startx to start X
+# Step 11: Run startx to start X
 echo "Running startx..."
 startx
 
