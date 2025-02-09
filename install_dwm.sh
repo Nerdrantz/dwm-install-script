@@ -11,12 +11,11 @@ sudo pacman -S --noconfirm git libxft libxinerama
 # Step 3: Clone the necessary repositories
 echo "Cloning dwm, st, and dmenu repositories..."
 cd $HOME/.local/src
-git clone https://github.com/Nerdrantz/dwm.git
-git clone https://github.com/Nerdrantz/st.git
-git clone https://github.com/Nerdrantz/dmenu.git
+git clone https://github.com/bugswriter/dwm.git
+git clone https://github.com/bugswriter/st.git
+git clone https://github.com/bugswriter/dmenu.git
 
 # Step 4: Build and install each project
-
 echo "Building and installing dwm..."
 cd dwm
 sudo make clean install
@@ -32,15 +31,29 @@ sudo make clean install
 # Step 5: Return to the main directory
 cd $HOME
 
-# Step 6: Copy /etc/X11/xinit/xinitrc to ~/.xinitrc
-echo "Copying /etc/X11/xinit/xinitrc to ~/.xinitrc..."
-cp /etc/X11/xinit/xinitrc ~/.xinitrc
+# Step 6: Check if xinitrc exists and copy it
+echo "Checking if /etc/X11/xinit/xinitrc exists..."
+if [ -f /etc/X11/xinit/xinitrc ]; then
+    echo "Copying /etc/X11/xinit/xinitrc to ~/.xinitrc..."
+    cp /etc/X11/xinit/xinitrc ~/.xinitrc
+else
+    echo "Error: /etc/X11/xinit/xinitrc not found. Please install xorg-xinit."
+    exit 1
+fi
 
-# Step 7: Add exec dwm to the bottom of ~/.xinitrc
+# Step 7: Remove the last 5 lines of ~/.xinitrc
+echo "Removing the last 5 lines of ~/.xinitrc..."
+head -n -5 ~/.xinitrc > ~/.xinitrc.tmp && mv ~/.xinitrc.tmp ~/.xinitrc
+
+# Step 8: Add exec dwm to the bottom of ~/.xinitrc
 echo "Adding exec dwm to the bottom of ~/.xinitrc..."
 echo "exec dwm" >> ~/.xinitrc
 
-# Step 8: Run startx to start X
+# Step 9: Install fonts
+echo "Installing fonts ttf-jetbrains-mono and ttf-font-awesome..."
+sudo pacman -S --noconfirm ttf-jetbrains-mono ttf-font-awesome
+
+# Step 10: Run startx to start X
 echo "Running startx..."
 startx
 
